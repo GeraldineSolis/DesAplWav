@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{title}}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each students}}
+            <tr style="{{#if highlight}}background-color: lightgreen;{{/if}}">
+                <td>{{name}}</td>
+                <td>{{grade}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>
