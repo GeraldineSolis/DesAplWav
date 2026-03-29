@@ -44,7 +44,9 @@ function remove(id) {
 }
 
 function listByStatus(status) {
-    return students.filter(s => s.status.toLowerCase() === status.toLowerCase());
+    return students.filter(s => 
+        s.status && s.status.toLowerCase() === status.toLowerCase()
+    );
 }
 
 function listByGrade(minGpa) {
