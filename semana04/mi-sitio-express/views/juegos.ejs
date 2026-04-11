@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Videojuegos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+</head>
+<body class="container">
+    <h3 class="center-align">Registro de Videojuegos</h3>
+    
+    <div class="row">
+        <form action="/juegos" method="POST" class="col s12">
+            <div class="input-field col s6"><input name="titulo" type="text" required><label>Título</label></div>
+            <div class="input-field col s6"><input name="plataforma" type="text" required><label>Plataforma</label></div>
+            <div class="input-field col s4"><input name="genero" type="text" required><label>Género</label></div>
+            <div class="input-field col s4"><input name="calificacion" type="number" step="0.1" required><label>Calificación</label></div>
+            <div class="input-field col s4"><input name="anio" type="number" required><label>Año de Lanzamiento</label></div>
+            <button type="submit" class="btn waves-effect waves-light">Guardar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr><th>Título</th><th>Plataforma</th><th>Género</th><th>Calificación</th><th>Año</th></tr>
+        </thead>
+        <tbody>
+            <% listaJuegos.forEach(j => { %>
+                <tr><td><%= j.titulo %></td><td><%= j.plataforma %></td><td><%= j.genero %></td><td><%= j.calificacion %></td><td><%= j.anio %></td></tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
