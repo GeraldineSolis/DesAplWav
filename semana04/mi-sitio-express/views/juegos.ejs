@@ -2,33 +2,102 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Videojuegos</title>
+    <title>Gamer Database</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body { background-color: #f5f5f5; }
+        .card-panel { border-radius: 15px; margin-top: 20px; }
+        .btn { border-radius: 8px; }
+        thead { background-color: #673ab7; color: white; }
+    </style>
 </head>
 <body class="container">
-    <h3 class="center-align">Registro de Videojuegos</h3>
-    
+
     <div class="row">
-        <form action="/juegos" method="POST" class="col s12">
-            <div class="input-field col s6"><input name="titulo" type="text" required><label>Título</label></div>
-            <div class="input-field col s6"><input name="plataforma" type="text" required><label>Plataforma</label></div>
-            <div class="input-field col s4"><input name="genero" type="text" required><label>Género</label></div>
-            <div class="input-field col s4"><input name="calificacion" type="number" step="0.1" required><label>Calificación</label></div>
-            <div class="input-field col s4"><input name="anio" type="number" required><label>Año de Lanzamiento</label></div>
-            <button type="submit" class="btn waves-effect waves-light">Guardar</button>
-        </form>
+        <div class="col s12">
+            <div class="card-panel white">
+                <h3 class="center-align deep-purple-text text-darken-2">
+                    <i class="material-icons large">videogame_asset</i><br>
+                    Gestión de Videojuegos
+                </h3>
+
+                <div class="row">
+                    <form action="/juegos" method="POST" class="col s12">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix">title</i>
+                                <input id="titulo" name="titulo" type="text" class="validate" required>
+                                <label for="titulo">Título del Juego</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix">computer</i>
+                                <input id="plataforma" name="plataforma" type="text" class="validate" required>
+                                <label for="plataforma">Plataforma (PS5, PC, Switch)</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s4">
+                                <i class="material-icons prefix">category</i>
+                                <input id="genero" name="genero" type="text" class="validate" required>
+                                <label for="genero">Género</label>
+                            </div>
+                            <div class="input-field col s4">
+                                <i class="material-icons prefix">star</i>
+                                <input id="calificacion" name="calificacion" type="number" step="0.1" min="0" max="10" class="validate" required>
+                                <label for="calificacion">Calificación (0-10)</label>
+                            </div>
+                            <div class="input-field col s4">
+                                <i class="material-icons prefix">event</i>
+                                <input id="anio" name="anio" type="number" class="validate" required>
+                                <label for="anio">Año</label>
+                            </div>
+                        </div>
+
+                        <div class="center-align">
+                            <button type="submit" class="btn-large waves-effect waves-light deep-purple darken-1">
+                                <i class="material-icons left">save</i>Guardar en Biblioteca
+                            </button>
+                            <a href="/" class="btn-large waves-effect waves-light amber darken-2">
+                                <i class="material-icons left">home</i>Inicio
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <table>
-        <thead>
-            <tr><th>Título</th><th>Plataforma</th><th>Género</th><th>Calificación</th><th>Año</th></tr>
-        </thead>
-        <tbody>
-            <% listaJuegos.forEach(j => { %>
-                <tr><td><%= j.titulo %></td><td><%= j.plataforma %></td><td><%= j.genero %></td><td><%= j.calificacion %></td><td><%= j.anio %></td></tr>
-            <% }) %>
-        </tbody>
-    </table>
+    <div class="card-panel">
+        <h5 class="deep-purple-text"><i class="material-icons left">list</i>Juegos Registrados</h5>
+        <table class="highlight centered responsive-table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Plataforma</th>
+                    <th>Género</th>
+                    <th>Calificación</th>
+                    <th>Año</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (listaJuegos.length === 0) { %>
+                    <tr><td colspan="5" class="grey-text">No hay juegos registrados todavía.</td></tr>
+                <% } else { %>
+                    <% listaJuegos.forEach(j => { %>
+                        <tr>
+                            <td><strong><%= j.titulo %></strong></td>
+                            <td><span class="chip"><%= j.plataforma %></span></td>
+                            <td><%= j.genero %></td>
+                            <td class="orange-text text-darken-3 font-weight-bold"><%= j.calificacion %> / 10</td>
+                            <td><%= j.anio %></td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
