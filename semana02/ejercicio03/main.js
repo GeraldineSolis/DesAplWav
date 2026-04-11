@@ -69,25 +69,33 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({ error: "Estudiante no encontrado" }));
         }
     } 
+
     else if (url === "/ListByStatus" && method === "POST") {
         let body = "";
-        req.on("data", chunk => (body += chunk));
+        req.on("data", chunk => {
+            body += chunk;
+        });
         req.on("end", () => {
-            try {
-                const { status } = JSON.parse(body);
+            try {                
+                const parsedBody = JSON.parse(body);
+                const status = parsedBody.status;
+
                 if (!status) {
                     res.statusCode = 400;
-                    res.end(JSON.stringify({ error: "El campo 'status' es obligatorio" }));
-                    return;
+                    return res.end(JSON.stringify({ error: "El campo 'status' es obligatorio" }));
                 }
+
                 const filtered = repo.listByStatus(status);
                 res.statusCode = 200;
                 res.end(JSON.stringify(filtered));
+
             } catch (error) {
+                console.error("Error al parsear:", error.message);
                 res.statusCode = 400;
-                res.end(JSON.stringify({ error: "JSON inválido" }));
+                res.end(JSON.stringify({ error: "JSON inválido", detalle: error.message }));
             }
         });
+        return; 
     }
 
     else if (url === "/ListByGrade" && method === "POST") {
