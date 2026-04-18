@@ -7,7 +7,23 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  res.status(200).json(service.list());
+  // Obtener parámetros de la URL 
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  
+  const allTickets = service.list();
+  
+  // Lógica de paginación
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const paginatedTickets = allTickets.slice(startIndex, endIndex);
+
+  res.status(200).json({
+      total: allTickets.length,
+      page: page,
+      limit: limit,
+      data: paginatedTickets
+  });
 };
 
 exports.assign = (req, res) => {

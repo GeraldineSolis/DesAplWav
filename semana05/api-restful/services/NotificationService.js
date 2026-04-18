@@ -31,5 +31,10 @@ class NotificationService {
   list() {
     return this.repo.findAll();
   }
+
+  listByTicket(ticketId) {
+    const allNotifications = this.repo.findAll();
+    return allNotifications.filter(n => n.ticketId === ticketId);
+  }
 }
 module.exports = NotificationService;

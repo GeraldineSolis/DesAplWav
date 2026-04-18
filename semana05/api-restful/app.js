@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
+const errorHandler = require("./middlewares/errorHandler");
 
 // Middleware
 app.use(express.json()); // Para leer JSON en las solicitudes
@@ -15,6 +16,7 @@ const notificationRoutes = require("./routes/notification.routes");
 //rutas bases
 app.use("/tickets", ticketRoutes);
 app.use("/notifications", notificationRoutes);
+app.use(errorHandler);
 
 // Mensaje de prueba en la raíz
 app.get("/", (req, res) => {
