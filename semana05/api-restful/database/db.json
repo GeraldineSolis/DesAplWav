@@ -1,0 +1,26 @@
+{
+  "tickets": [],
+  "notifications": [
+    {
+      "id": "f769fb91-3d2f-49c3-8ac2-be1695ffb513",
+      "type": "email",
+      "message": "Nuevo ticket creado: Problema 1",
+      "status": "pending",
+      "ticketId": "42502856-06a9-4285-ad62-9fc60d53750b"
+    },
+    {
+      "id": "4ad7e178-9035-4d21-b4d3-9a662ccce944",
+      "type": "email",
+      "message": "El ticket 42502856-06a9-4285-ad62-9fc60d53750b fue asignado a Geraldine",
+      "status": "pending",
+      "ticketId": "42502856-06a9-4285-ad62-9fc60d53750b"
+    },
+    {
+      "id": "e90290d9-08d1-4c20-8067-509adc8a5762",
+      "type": "push",
+      "message": "El ticket 42502856-06a9-4285-ad62-9fc60d53750b cambió a asignado",
+      "status": "pending",
+      "ticketId": "42502856-06a9-4285-ad62-9fc60d53750b"
+    }
+  ]
+}
