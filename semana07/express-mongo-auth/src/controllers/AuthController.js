@@ -1,7 +1,6 @@
 import authService from '../services/AuthService.js';
-
+import userRepository from '../repositories/UserRepository.js'; 
 class AuthController {
-
     async signUp(req, res, next) {
         try {
             const payload = req.body;
@@ -22,8 +21,18 @@ class AuthController {
             if (!email || !password) 
                 return res.status(400).json({ message: 'El email y password son requeridos' });
             
-            const token = await authService.signIn({ email, password });
-            return res.status(200).json(token);
+            const result = await authService.signIn({ email, password });
+            
+            const user = await userRepository.findByEmail(email);
+
+            return res.status(200).json({
+                token: result.token,
+                user: {
+                    email: user.email,
+                    name: user.name,
+                    role: user.roles[0].name 
+                }
+            });
         } catch (err) {
             next(err);
         }

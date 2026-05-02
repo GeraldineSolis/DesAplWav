@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Mi Perfil</title>
+</head>
+<body>
+    <div class="container">
+        <h4>Mis Datos</h4>
+        <div id="userData" class="card-panel">
+            </div>
+        <button class="btn red" onclick="logout()">Cerrar Sesión</button>
+    </div>
+    <script>
+        async function loadProfile() {
+            const token = sessionStorage.getItem('token');
+            if (!token) window.location.href = '/signIn';
+
+            const res = await fetch('/api/users/me', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const user = await res.json();
+            if (res.ok) {
+                document.getElementById('userData').innerHTML = `
+                    <p><b>Nombre:</b> ${user.name} ${user.lastName}</p>
+                    <p><b>Email:</b> ${user.email}</p>
+                    <p><b>Roles:</b> ${user.roles.join(', ')}</p>
+                `;
+            } else {
+                window.location.href = '/signIn';
+            }
+        }
+        function logout() {
+            sessionStorage.removeItem('token');
+            window.location.href = '/signIn';
+        }
+        loadProfile();
+    </script>
+</body>
+</html>

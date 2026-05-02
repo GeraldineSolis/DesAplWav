@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Registro - Tecsup</title>
+</head>
+<body>
+    <div class="container">
+        <h4>Crear Cuenta</h4>
+        <div class="row">
+            <form class="col s12" id="signupForm">
+                <div class="row">
+                    <div class="input-field col s6"><input id="name" type="text" required><label for="name">Nombre</label></div>
+                    <div class="input-field col s6"><input id="lastName" type="text" required><label for="lastName">Apellido</label></div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6"><input id="email" type="email" required><label for="email">Email</label></div>
+                    <div class="input-field col s6"><input id="password" type="password" required><label for="password">Password (min 8 carac, @$#...)</label></div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6"><input id="phoneNumber" type="text" required><label for="phoneNumber">Teléfono</label></div>
+                    <div class="input-field col s6"><input id="birthdate" type="date" required><label for="birthdate">Fecha Nacimiento</label></div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12"><input id="address" type="text"><label for="address">Dirección</label></div>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">Registrarse</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                birthdate: document.getElementById('birthdate').value,
+                address: document.getElementById('address').value
+            };
+            const response = await fetch('/api/auth/signUp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                alert('Registro exitoso');
+                window.location.href = '/signIn'; 
+            } else {
+                alert('Error en el registro');
+            }
+        });
+    </script>
+</body>
+</html>

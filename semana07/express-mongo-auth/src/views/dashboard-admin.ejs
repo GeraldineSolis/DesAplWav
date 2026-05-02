@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Tecsup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f9;
+            font-family: 'Roboto', sans-serif;
+        }
+        nav {
+            background: linear-gradient(135deg, #01579b 0%, #00acc1 100%);
+            margin-bottom: 30px;
+        }
+        .brand-logo { margin-left: 20px; font-weight: 700; }
+        .card-panel { border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important; }
+        .table-container { padding: 20px; }
+        thead { background-color: #e1f5fe; }
+        th { color: #01579b; border-radius: 0; }
+        .btn-view {
+            background-color: #01579b !important;
+            border-radius: 20px;
+            text-transform: none;
+        }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background-color: #c8e6c9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"><i class="material-icons">security</i> Admin Panel</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/profile">Mi Perfil</a></li>
+                <li><a href="javascript:void(0)" onclick="logout()"><i class="material-icons left">exit_to_app</i>Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4 style="color: #37474f; font-weight: 300;">Gestión de Usuarios</h4>
+                <p class="grey-text">Listado completo de usuarios registrados en el sistema.</p>
+            </div>
+        </div>
+
+        <div class="card-panel">
+            <div class="table-container">
+                <table class="highlight responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre Completo</th>
+                            <th>Correo Electrónico</th>
+                            <th>Teléfono</th>
+                            <th>F. Registro</th>
+                            <th>Estado</th>
+                            <th class="center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalUser" class="modal">
+        <div class="modal-content">
+            <h4>Detalle del Usuario</h4>
+            <div id="userDetailContent"></div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            M.Modal.init(elems);
+            loadUsers();
+        });
+
+        async function loadUsers() {
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/signIn';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json' 
+                    }
+                });
+
+                if (response.status === 403) {
+                    window.location.href = '/403';
+                    return;
+                }
+
+                if (!response.ok) throw new Error('Error al obtener usuarios');
+
+                const users = await response.json();
+                const tbody = document.getElementById('userTableBody');
+                tbody.innerHTML = '';
+
+                users.forEach(user => {
+                    const row = `
+                        <tr>
+                            <td>${user.name} ${user.lastName || ''}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phoneNumber || 'N/A'}</td>
+                            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                            <td><span class="status-badge">Activo</span></td>
+                            <td class="center">
+                                <button onclick="viewUser('${user._id}')" class="btn btn-view waves-effect waves-light">
+                                    <i class="material-icons left" style="font-size: 1.2rem;">visibility</i> Ver Info
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error(error);
+                M.toast({html: 'Error al cargar usuarios', classes: 'red'});
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('token');
+            window.location.href = '/signIn';
+        }
+
+        async function viewUser(id) {
+            M.toast({html: 'Cargando información del ID: ' + id});
+        }
+    </script>
+</body>
+</html>

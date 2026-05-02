@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+            background: linear-gradient(135deg, #01579b 0%, #00acc1 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #01579b 0%, #00acc1 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .login-box {
+            width: 420px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-box h4 {
+            color: #01579b;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        .input-field input:focus+label {
+            color: #00acc1 !important;
+        }
+
+        .input-field input:focus {
+            border-bottom: 1px solid #00acc1 !important;
+            box-shadow: 0 1px 0 0 #00acc1 !important;
+        }
+
+        .prefix.active {
+            color: #00acc1 !important;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(to right, #01579b, #00acc1) !important;
+            border-radius: 30px;
+            height: 50px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 172, 193, 0.4);
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            color: #757575;
+        }
+
+        .footer-links a {
+            color: #01579b;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <h4>Tecsup Auth</h4>
+        <form id="loginForm">
+            <div class="input-field">
+                <i class="material-icons prefix">alternate_email</i>
+                <input id="email" type="email" class="validate" required>
+                <label for="email">Correo Institucional</label>
+            </div>
+            <div class="input-field">
+                <i class="material-icons prefix">fingerprint</i>
+                <input id="password" type="password" class="validate" required>
+                <label for="password">Contraseña</label>
+            </div>
+            <button class="btn btn-login waves-effect waves-light" type="submit">
+                Iniciar Sesión
+            </button>
+        </form>
+        <div class="footer-links">
+            ¿Eres nuevo? <a href="/signUp">Crea una cuenta</a>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const res = await fetch('/api/auth/signIn', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Guardar token en sessionStorage según requisitos [cite: 122]
+                sessionStorage.setItem('token', data.token);
+
+                // Redirigir según el rol devuelto por el servidor [cite: 123]
+                if (data.user.role === 'admin') {
+                    window.location.href = '/admin';
+                } else {
+                    window.location.href = '/dashboard';
+                }
+            } else {
+                alert('Error: ' + (data.message || 'Credenciales incorrectas'));
+            }
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            alert('Hubo un problema con la conexión al servidor.');
+        }
+    };
+</script>
+
+</html>
