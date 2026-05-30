@@ -153,7 +153,7 @@ function ProjectFormDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-2">
               <Label>Categoría <span className="text-red-500">*</span></Label>
-              <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
+              <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v ?? ""})}>
                 <SelectTrigger><SelectValue placeholder="Categoría" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="web">Desarrollo Web</SelectItem>
@@ -166,7 +166,7 @@ function ProjectFormDialog({
             </div>
             <div className="grid gap-2">
               <Label>Prioridad <span className="text-red-500">*</span></Label>
-              <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
+              <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v ?? "" })}>
                 <SelectTrigger><SelectValue placeholder="Prioridad" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Baja">Baja</SelectItem>
@@ -180,7 +180,7 @@ function ProjectFormDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-2">
               <Label>Estado</Label>
-              <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+              <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v ?? "" })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Planificado">Planificado</SelectItem>
@@ -239,7 +239,7 @@ export function ProjectsSection() {
     <div className="space-y-4">
       <div className="flex justify-end">
         <Dialog open={formOpen} onOpenChange={setFormOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger>
             <Button onClick={() => setEditProject(null)}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                 <path d="M5 12h14" /><path d="M12 5v14" />
@@ -284,7 +284,7 @@ export function ProjectsSection() {
                   <div className="flex gap-1">
                     {/* Detail */}
                     <Dialog>
-                      <DialogTrigger asChild>
+                      <DialogTrigger>
                         <Button size="sm" variant="ghost" onClick={() => setDetailProject(project)}>Ver</Button>
                       </DialogTrigger>
                       {detailProject?.id === project.id && (
@@ -293,7 +293,7 @@ export function ProjectsSection() {
                     </Dialog>
                     {/* Edit */}
                     <Dialog open={formOpen && editProject?.id === project.id} onOpenChange={(v) => { setFormOpen(v); if (!v) setEditProject(null); }}>
-                      <DialogTrigger asChild>
+                      <DialogTrigger>
                         <Button size="sm" variant="outline" onClick={() => { setEditProject(project); setFormOpen(true); }}>Editar</Button>
                       </DialogTrigger>
                       {editProject?.id === project.id && (
@@ -302,7 +302,7 @@ export function ProjectsSection() {
                     </Dialog>
                     {/* Delete */}
                     <AlertDialog>
-                      <AlertDialogTrigger asChild>
+                      <AlertDialogTrigger>
                         <Button size="sm" variant="destructive">Eliminar</Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -331,7 +331,7 @@ export function ProjectForm() {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
             <path d="M5 12h14" /><path d="M12 5v14" />

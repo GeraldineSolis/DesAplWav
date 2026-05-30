@@ -31,7 +31,6 @@ import { useAppState, TeamMember } from "@/components/AppState";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-// ─── Member Form Dialog ───────────────────────────────────────────────────────
 function MemberDialog({
     open, onOpenChange, editMember,
 }: {
@@ -109,7 +108,7 @@ function MemberDialog({
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-2">
                             <Label>Rol <span className="text-red-500">*</span></Label>
-                            <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v })}>
+                            <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v ?? "" })}>
                                 <SelectTrigger><SelectValue placeholder="Rol" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="Frontend Developer">Frontend Developer</SelectItem>
@@ -124,7 +123,7 @@ function MemberDialog({
                         </div>
                         <div className="grid gap-2">
                             <Label>Posición <span className="text-red-500">*</span></Label>
-                            <Select value={form.position} onValueChange={(v) => setForm({ ...form, position: v })}>
+                            <Select value={form.position} onValueChange={(v) => setForm({ ...form, position: v ?? "" })}>
                                 <SelectTrigger><SelectValue placeholder="Posición" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="Junior">Junior</SelectItem>
@@ -144,7 +143,7 @@ function MemberDialog({
                         <div className="grid gap-2">
                             <Label>Fecha de nacimiento</Label>
                             <Popover open={calOpen} onOpenChange={setCalOpen}>
-                                <PopoverTrigger asChild>
+                                <PopoverTrigger>
                                     <Button type="button" variant="outline" className="w-full justify-start text-left font-normal">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" />
@@ -153,16 +152,25 @@ function MemberDialog({
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar mode="single" selected={birthdateDate}
-                                        onSelect={(d) => { setBirthdateDate(d); setForm({ ...form, birthdate: d ? format(d, "yyyy-MM-dd") : "" }); setCalOpen(false); }}
-                                        locale={es} captionLayout="dropdown" fromYear={1960} toYear={2005} />
+                                    <Calendar
+                                        mode="single"
+                                        selected={birthdateDate}
+                                        onSelect={(d) => {
+                                            setBirthdateDate(d);
+                                            setForm({ ...form, birthdate: d ? format(d, 'yyyy-MM-dd') : "" });
+                                        }}
+                                        locale={es}
+                                        captionLayout="dropdown" 
+                                        startMonth={new Date(1960, 0)} 
+                                        endMonth={new Date(2005, 11)}   
+                                    />
                                 </PopoverContent>
                             </Popover>
                         </div>
                     </div>
                     <div className="grid gap-2">
                         <Label>Proyecto asignado</Label>
-                        <Select value={form.projectId} onValueChange={(v) => setForm({ ...form, projectId: v })}>
+                        <Select value={form.projectId} onValueChange={(v) => setForm({ ...form, projectId: v ?? "" })}>
                             <SelectTrigger><SelectValue placeholder="Seleccionar proyecto" /></SelectTrigger>
                             <SelectContent>
                                 {projects.map((p) => (
@@ -188,7 +196,6 @@ function MemberDialog({
     );
 }
 
-// ─── Main Export ──────────────────────────────────────────────────────────────
 export function TeamTable() {
     const { team, setTeam } = useAppState();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -202,7 +209,7 @@ export function TeamTable() {
         <div className="space-y-4">
             <div className="flex justify-end">
                 <Dialog open={dialogOpen && !editMember} onOpenChange={(v) => { setDialogOpen(v); if (!v) setEditMember(null); }}>
-                    <DialogTrigger asChild>
+                    <DialogTrigger>
                         <Button onClick={() => setEditMember(null)}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                                 <path d="M5 12h14" /><path d="M12 5v14" />
@@ -256,7 +263,7 @@ export function TeamTable() {
                                         {/* Edit */}
                                         <Dialog open={dialogOpen && editMember?.userId === member.userId}
                                             onOpenChange={(v) => { setDialogOpen(v); if (!v) setEditMember(null); }}>
-                                            <DialogTrigger asChild>
+                                            <DialogTrigger>
                                                 <Button size="sm" variant="outline"
                                                     onClick={() => { setEditMember(member); setDialogOpen(true); }}>
                                                     Editar
@@ -268,7 +275,7 @@ export function TeamTable() {
                                         </Dialog>
                                         {/* Delete */}
                                         <AlertDialog>
-                                            <AlertDialogTrigger asChild>
+                                            <AlertDialogTrigger>
                                                 <Button size="sm" variant="destructive">Eliminar</Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>

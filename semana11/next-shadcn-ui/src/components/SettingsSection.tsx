@@ -64,7 +64,7 @@ export function SettingsSection() {
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label>Zona horaria</Label>
-              <Select value={form.timezone} onValueChange={(v) => setForm({ ...form, timezone: v })}>
+              <Select value={form.timezone} onValueChange={(v) => setForm({ ...form, timezone: v ?? "" })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="America/Lima">America/Lima (UTC-5)</SelectItem>
@@ -78,7 +78,7 @@ export function SettingsSection() {
             </div>
             <div className="grid gap-2">
               <Label>Idioma</Label>
-              <Select value={form.language} onValueChange={(v) => setForm({ ...form, language: v })}>
+              <Select value={form.language} onValueChange={(v) => setForm({ ...form, language: v ?? "" })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="es">Español</SelectItem>
@@ -126,7 +126,7 @@ export function SettingsSection() {
         <CardContent className="space-y-4">
           <div className="grid gap-2">
             <Label>Tema</Label>
-            <Select value={form.theme} onValueChange={(v) => setForm({ ...form, theme: v })}>
+            <Select value={form.theme} onValueChange={(v) => setForm({ ...form, theme: v ?? ""})}>
               <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Claro</SelectItem>
