@@ -31,20 +31,20 @@ export default async function RootLayout({
             <body
                 className={`${geistSans.className} ${geistMono.className} antialiased`}
             >
-                <nav className="w-full bg-black shadow-sm">
-                    <div className="mx-auto px-6 py-4 flex items-center justify-between">
-                        <Link href="/" className="text-xl font-semibold">
+                <nav className="w-full border-b border-slate-800 bg-slate-950 shadow-lg shadow-slate-950/30">
+                    <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+                        <Link href="/" className="text-xl font-black tracking-tight !text-white">
                             MyAuthApp
                         </Link>
-                        <ul className="flex items-center justify-center gap-6 text-sm">
+                        <ul className="flex items-center gap-6 text-sm font-semibold text-slate-50">
                             <li>
-                                <Link href="/dashboard" className="hover:text-gray-600">
+                                <Link href="/dashboard" className="rounded-md px-2 py-1 transition hover:bg-slate-800 hover:text-white">
                                     Dashboard
                                 </Link>
                             </li>
                             {session?.user && (
                                 <li>
-                                    <Link href="/profile" className="hover:text-gray-600">
+                                    <Link href="/profile" className="rounded-md px-2 py-1 transition hover:bg-slate-800 hover:text-white">
                                         Profile
                                     </Link>
                                 </li>

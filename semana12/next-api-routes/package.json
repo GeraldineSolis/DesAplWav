@@ -4,9 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+<<<<<<< HEAD
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
+=======
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint"
+>>>>>>> f1f5f40796f3b884c0d4b89970f82caa5a380e1b
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -31,4 +37,8 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f1f5f40796f3b884c0d4b89970f82caa5a380e1b

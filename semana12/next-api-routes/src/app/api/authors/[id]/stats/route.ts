@@ -33,8 +33,13 @@ export async function GET(
     const totalBooks = books.length
     const firstBookYear = books[0].publishedYear
     const lastBookYear = books[books.length - 1].publishedYear
+<<<<<<< HEAD
     
     const totalPages = books.reduce((acc, book) => acc + (book.pages || 0), 0)
+=======
+
+    const totalPages = books.reduce((acc: number, book) => acc + (book.pages || 0), 0)
+>>>>>>> f1f5f40796f3b884c0d4b89970f82caa5a380e1b
     const avgPages = Math.round(totalPages / totalBooks)
 
     const uniqueGenres = Array.from(new Set(books.map(b => b.genre).filter(Boolean)))
@@ -42,9 +47,19 @@ export async function GET(
     let mostPagesBook = books[0]
     let leastPagesBook = books[0]
 
+<<<<<<< HEAD
     books.forEach(book => {
       if ((book.pages || 0) > (mostPagesBook.pages || 0)) mostPagesBook = book
       if ((book.pages || 0) < (leastPagesBook.pages || 0)) leastPagesBook = book
+=======
+    books.forEach((book) => {
+      const currentPages = book.pages || 0
+      const mostPages = mostPagesBook.pages || 0
+      const leastPages = leastPagesBook.pages || 0
+
+      if (currentPages > mostPages) mostPagesBook = book
+      if (currentPages < leastPages) leastPagesBook = book
+>>>>>>> f1f5f40796f3b884c0d4b89970f82caa5a380e1b
     })
 
     return NextResponse.json({
