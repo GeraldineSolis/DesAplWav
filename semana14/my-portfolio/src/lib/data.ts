@@ -33,12 +33,12 @@ export const projects: Project[] = [
 ];
 
 export const personalInfo = {
-  name: 'Tu Nombre',
+  name: 'Geraldine Solis',
   title: 'Full Stack Developer',
   description: 'Desarrollador apasionado por crear experiencias web excepcionales',
-  email: 'tu@email.com',
-  github: 'https://github.com/tuusuario',
+  email: 'solis.geraldine@tecsup.edu.pe',
+  github: 'https://github.com/GeraldineS',
   linkedin: 'https://linkedin.com/in/tuusuario',
   siteUrl: 'https://tuportafolio.com',
-  avatar: 'https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  avatar: 'https://images.unsplash.com/photo-1773332598413-a6d5279d1ae8?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
 };

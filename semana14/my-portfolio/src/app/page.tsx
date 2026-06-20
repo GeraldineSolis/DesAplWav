@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
-      <section className="text-center mb-20">
+      <section className="mb-20 rounded-[2rem] border border-[#eadbc7] bg-[#fffaf3]/90 p-8 shadow-sm md:p-12">
         <div className="relative w-32 h-32 mx-auto mb-6">
           <Image
             src={personalInfo.avatar}
@@ -21,31 +21,31 @@ export default function Home() {
             quality={90}
           />
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-6xl font-bold text-[#3f3124] mb-4">
           {personalInfo.name}
         </h1>
-        <p className="text-xl md:text-2xl text-gray-600 mb-6">
+        <p className="text-xl md:text-2xl text-[#a56f45] mb-6">
           {personalInfo.title}
         </p>
-        <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
+        <p className="text-lg text-[#5d4a3a] max-w-2xl mx-auto mb-8 leading-relaxed">
           {personalInfo.description}
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Link
             href="/projects"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="bg-[#c98b5d] text-white px-6 py-3 rounded-xl hover:bg-[#b77d4b] transition shadow-sm"
           >
             Ver Proyectos
           </Link>
           <Link
             href="/about"
-            className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition"
+            className="bg-[#f3e6cf] text-[#5a4633] px-6 py-3 rounded-xl hover:bg-[#ead5a7] transition"
           >
             Sobre Mí
           </Link>
           <Link
             href="/contact"
-            className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
+            className="bg-[#5d7a63] text-white px-6 py-3 rounded-xl hover:bg-[#4f6c56] transition"
           >
             Contactar
           </Link>
@@ -54,7 +54,7 @@ export default function Home() {
 
       {/* Featured Projects */}
       <section>
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h2 className="text-3xl font-bold text-[#3f3124] mb-8 text-center">
           Proyectos Destacados
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

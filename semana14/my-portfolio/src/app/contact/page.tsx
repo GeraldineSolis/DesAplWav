@@ -10,52 +10,52 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <section className="max-w-5xl mx-auto">
-        <div className="text-center mb-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600 mb-3">
+      <section className="mx-auto max-w-5xl">
+        <div className="mb-10 text-center">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-[#c98b5d]">
             Contacto
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="mb-4 text-4xl font-bold text-[#3f3124] md:text-5xl">
             Hablemos de tu próximo proyecto
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-[#5d4a3a]">
             Estoy disponible para colaborar en ideas, desarrollo web y oportunidades de trabajo.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+        <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-3xl border border-[#eadbc7] bg-[#fffaf3] p-8 shadow-sm">
+            <h2 className="mb-6 text-2xl font-semibold text-[#3f3124]">
               Información de contacto
             </h2>
             <div className="space-y-5">
               <div>
-                <p className="text-sm text-gray-500">Email</p>
+                <p className="text-sm text-[#8b6b4f]">Email</p>
                 <a
                   href={`mailto:${personalInfo.email}`}
-                  className="text-lg font-medium text-blue-600 hover:text-blue-700"
+                  className="text-lg font-medium text-[#c98b5d] hover:text-[#a56f45]"
                 >
                   {personalInfo.email}
                 </a>
               </div>
               <div>
-                <p className="text-sm text-gray-500">GitHub</p>
+                <p className="text-sm text-[#8b6b4f]">GitHub</p>
                 <a
                   href={personalInfo.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg font-medium text-blue-600 hover:text-blue-700"
+                  className="text-lg font-medium text-[#c98b5d] hover:text-[#a56f45]"
                 >
                   {personalInfo.github.replace('https://', '')}
                 </a>
               </div>
               <div>
-                <p className="text-sm text-gray-500">LinkedIn</p>
+                <p className="text-sm text-[#8b6b4f]">LinkedIn</p>
                 <a
                   href={personalInfo.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg font-medium text-blue-600 hover:text-blue-700"
+                  className="text-lg font-medium text-[#c98b5d] hover:text-[#a56f45]"
                 >
                   {personalInfo.linkedin.replace('https://', '')}
                 </a>
@@ -63,21 +63,21 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-2xl p-8 text-white">
-            <h2 className="text-2xl font-semibold mb-4">¿Listo para iniciar?</h2>
-            <p className="text-gray-300 mb-6">
+          <div className="rounded-3xl bg-[#3f3124] p-8 text-[#f7efe3]">
+            <h2 className="mb-4 text-2xl font-semibold">¿Listo para iniciar?</h2>
+            <p className="mb-6 text-[#e4d2b3]">
               Envíame un mensaje y te responderé lo antes posible.
             </p>
             <div className="space-y-3">
               <Link
                 href={`mailto:${personalInfo.email}`}
-                className="inline-flex w-full justify-center rounded-lg bg-blue-600 px-5 py-3 text-center font-medium text-white hover:bg-blue-700 transition"
+                className="inline-flex w-full justify-center rounded-xl bg-[#c98b5d] px-5 py-3 text-center font-medium text-white transition hover:bg-[#b77d4b]"
               >
                 Enviar email
               </Link>
               <Link
                 href="/projects"
-                className="inline-flex w-full justify-center rounded-lg border border-gray-700 px-5 py-3 text-center font-medium text-white hover:bg-gray-800 transition"
+                className="inline-flex w-full justify-center rounded-xl border border-[#5d4a3a] px-5 py-3 text-center font-medium text-[#f7efe3] transition hover:bg-[#4c3a2f]"
               >
                 Ver proyectos
               </Link>
