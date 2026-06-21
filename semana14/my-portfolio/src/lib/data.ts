@@ -39,6 +39,6 @@ export const personalInfo = {
   email: 'solis.geraldine@tecsup.edu.pe',
   github: 'https://github.com/GeraldineS',
   linkedin: 'https://linkedin.com/in/tuusuario',
-  siteUrl: 'https://tuportafolio.com',
+  siteUrl: 'https://portafolio-solis.vercel.app',
   avatar: 'https://images.unsplash.com/photo-1773332598413-a6d5279d1ae8?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
 };
