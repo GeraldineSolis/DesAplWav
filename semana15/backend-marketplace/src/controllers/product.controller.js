@@ -1,8 +1,11 @@
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.findAll({
+      include: [{ model: Category, as: 'category', attributes: ['id', 'nombre'] }]
+    });
 
     res.json({
       success: true,
@@ -21,7 +24,9 @@ exports.getAllProducts = async (req, res) => {
 
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findByPk(req.params.id, {
+      include: [{ model: Category, as: 'category', attributes: ['id', 'nombre'] }]
+    });
 
     if (!product) {
       return res.status(404).json({
@@ -48,7 +53,7 @@ exports.getProductById = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { nombre, precio, descripcion } = req.body;
+    const { nombre, precio, descripcion, categoryId, imageUrl } = req.body;
 
     if (!nombre || !precio) {
       return res.status(400).json({
@@ -66,16 +71,35 @@ exports.createProduct = async (req, res) => {
       });
     }
 
+    // Validar categoría si se proporciona
+    if (categoryId) {
+      const category = await Category.findByPk(categoryId);
+      if (!category) {
+        return res.status(400).json({
+          success: false,
+          message: 'Categoría no encontrada',
+          data: null
+        });
+      }
+    }
+
     const product = await Product.create({
       nombre,
       precio,
-      descripcion
+      descripcion,
+      categoryId,
+      imageUrl
+    });
+
+    // Incluir categoría en la respuesta
+    const productWithCategory = await Product.findByPk(product.id, {
+      include: [{ model: Category, as: 'category', attributes: ['id', 'nombre'] }]
     });
 
     res.status(201).json({
       success: true,
       message: 'Producto creado correctamente',
-      data: product
+      data: productWithCategory
     });
   } catch (error) {
     console.error('Error al crear producto:', error);
@@ -89,7 +113,7 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const { nombre, precio, descripcion } = req.body;
+    const { nombre, precio, descripcion, categoryId, imageUrl } = req.body;
     const product = await Product.findByPk(req.params.id);
 
     if (!product) {
@@ -108,16 +132,35 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
+    // Validar categoría si se proporciona
+    if (categoryId) {
+      const category = await Category.findByPk(categoryId);
+      if (!category) {
+        return res.status(400).json({
+          success: false,
+          message: 'Categoría no encontrada',
+          data: null
+        });
+      }
+    }
+
     await product.update({
       nombre,
       precio,
-      descripcion
+      descripcion,
+      categoryId,
+      imageUrl
+    });
+
+    // Incluir categoría en la respuesta
+    const updatedProduct = await Product.findByPk(product.id, {
+      include: [{ model: Category, as: 'category', attributes: ['id', 'nombre'] }]
     });
 
     res.json({
       success: true,
       message: 'Producto actualizado correctamente',
-      data: product
+      data: updatedProduct
     });
   } catch (error) {
     console.error('Error al actualizar producto:', error);

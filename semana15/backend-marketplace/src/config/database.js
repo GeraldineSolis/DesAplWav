@@ -9,12 +9,17 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'mysql',
-        logging: false,
+        logging: process.env.NODE_ENV === 'production' ? false : false, // Siempre false para performance
         pool: {
-            max: 5,
+            max: process.env.NODE_ENV === 'production' ? 5 : 2, // Menos conexiones en dev
             min: 0,
             acquire: 30000,
-            idle: 10000
+            idle: 5000 // Reducido para liberar recursos
+        },
+        dialectOptions: {
+            connectTimeout: 10000,
+            enableKeepAlive: true,
+            keepAliveInitialDelaySeconds: 0
         }
     }
 );

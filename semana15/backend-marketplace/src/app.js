@@ -1,13 +1,22 @@
 const express = require("express");
 const cors = require("cors");
 const productsRouter = require("./routes/products");
+const categoriesRouter = require("./routes/categories");
+const authRouter = require("./routes/auth");
 
 const app = express();
 
-app.use(cors());
+// Configurar CORS
+const corsOptions = {
+    origin: process.env.CORS_ORIGIN || '*',
+    credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
+app.use("/api/auth", authRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/categories", categoriesRouter);
 
 app.get("/", (req, res) => {
     res.json({ message: "AOI E-comerce funcionando" });

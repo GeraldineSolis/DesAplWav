@@ -1,30 +1,57 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Product, ApiResponse } from '@/types/product';
+import { Product, Category, ApiResponse } from '@/types/product';
+import { useAuth } from '@/context/AuthContext';
+import { getToken } from '@/utils/auth';
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export default function AdminPage() {
+  const { user, isLoading: authLoading } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     nombre: '',
     precio: '',
     descripcion: '',
+    categoryId: '',
+    imageUrl: '',
   });
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (!authLoading) {
+      fetchProducts();
+      fetchCategories();
+    }
+  }, [authLoading]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch(`${API_URL}/categories`);
+      const data: ApiResponse<Category[]> = await res.json();
+
+      if (data.success) {
+        setCategories(data.data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API_URL}/products`);
+      const token = getToken();
+      const res = await fetch(`${API_URL}/products`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data: ApiResponse<Product[]> = await res.json();
 
       if (data.success) {
@@ -45,17 +72,21 @@ export default function AdminPage() {
       : `${API_URL}/products`;
 
     const method = editingId ? 'PUT' : 'POST';
+    const token = getToken();
 
     try {
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           nombre: formData.nombre,
           precio: parseFloat(formData.precio),
           descripcion: formData.descripcion || undefined,
+          categoryId: formData.categoryId ? parseInt(formData.categoryId) : undefined,
+          imageUrl: formData.imageUrl || undefined,
         }),
       });
 
@@ -64,6 +95,8 @@ export default function AdminPage() {
           nombre: '',
           precio: '',
           descripcion: '',
+          categoryId: '',
+          imageUrl: '',
         });
 
         setEditingId(null);
@@ -79,6 +112,8 @@ export default function AdminPage() {
       nombre: product.nombre,
       precio: product.precio.toString(),
       descripcion: product.descripcion || '',
+      categoryId: product.categoryId?.toString() || '',
+      imageUrl: product.imageUrl || '',
     });
 
     setEditingId(product.id);
@@ -87,9 +122,14 @@ export default function AdminPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('¿Estás seguro?')) return;
 
+    const token = getToken();
+
     try {
       const res = await fetch(`${API_URL}/products/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (res.ok) {
@@ -105,16 +145,29 @@ export default function AdminPage() {
       nombre: '',
       precio: '',
       descripcion: '',
+      categoryId: '',
+      imageUrl: '',
     });
 
     setEditingId(null);
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center text-gray-500">
           Cargando...
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || user.role !== 'ADMIN') {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="text-center">
+          <p className="text-gray-900 font-semibold mb-4">Acceso denegado</p>
+          <p className="text-gray-600">Solo los administradores pueden acceder a esta página</p>
         </div>
       </div>
     );
@@ -195,6 +248,49 @@ export default function AdminPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Categoría
+                </label>
+
+                <select
+                  value={formData.categoryId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      categoryId: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900 text-gray-900"
+                >
+                  <option value="">Sin categoría</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id.toString()}>
+                      {category.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  URL de imagen
+                </label>
+
+                <input
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      imageUrl: e.target.value,
+                    })
+                  }
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900 text-gray-900"
+                />
+              </div>
+
               <div className="flex gap-2">
                 <button
                   type="submit"
@@ -230,6 +326,10 @@ export default function AdminPage() {
                     Precio
                   </th>
 
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    Categoría
+                  </th>
+
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     Acciones
                   </th>
@@ -248,6 +348,10 @@ export default function AdminPage() {
 
                     <td className="px-6 py-4 text-sm text-gray-900">
                       S/ {product.precio}
+                    </td>
+
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {product.category?.nombre || 'Sin categoría'}
                     </td>
 
                     <td className="px-6 py-4 text-sm text-right">

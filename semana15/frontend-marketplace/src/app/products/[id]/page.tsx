@@ -41,29 +41,50 @@ export default async function ProductDetailPage({
         ← Volver a productos
       </Link>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          {product.nombre}
-        </h1>
-
-        <div className="text-3xl font-bold text-gray-900 mb-6">
-          S/ {product.precio}
-        </div>
-
-        {product.descripcion && (
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Descripción
-            </h2>
-
-            <p className="text-gray-600 leading-relaxed">
-              {product.descripcion}
-            </p>
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        {product.imageUrl && (
+          <div className="w-full h-96 bg-gray-200 overflow-hidden">
+            <img
+              src={product.imageUrl}
+              alt={product.nombre}
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
 
-        <div className="pt-6 border-t border-gray-200 text-sm text-gray-500">
-          ID del producto: {product.id}
+        <div className="p-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {product.nombre}
+          </h1>
+
+          {product.category && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">Categoría:</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {product.category.nombre}
+              </p>
+            </div>
+          )}
+
+          <div className="text-3xl font-bold text-gray-900 mb-6">
+            S/ {product.precio}
+          </div>
+
+          {product.descripcion && (
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                Descripción
+              </h2>
+
+              <p className="text-gray-600 leading-relaxed">
+                {product.descripcion}
+              </p>
+            </div>
+          )}
+
+          <div className="pt-6 border-t border-gray-200 text-sm text-gray-500">
+            ID del producto: {product.id}
+          </div>
         </div>
       </div>
     </div>
