@@ -3,6 +3,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 export const saveToken = (token: string) => {
   if (typeof window !== 'undefined') {
     localStorage.setItem('auth_token', token);
+    // Set cookie: expires in 7 days (604800 seconds)
+    const maxAge = 7 * 24 * 60 * 60;
+    document.cookie = `auth_token=${token}; path=/; max-age=${maxAge}; SameSite=Lax`;
   }
 };
 
@@ -16,6 +19,8 @@ export const getToken = (): string | null => {
 export const removeToken = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('auth_token');
+    // Clear cookie
+    document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
   }
 };
 

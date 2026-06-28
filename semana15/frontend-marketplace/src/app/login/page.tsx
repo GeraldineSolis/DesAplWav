@@ -1,17 +1,20 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, FormEvent, ChangeEvent, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
+
+  const redirect = searchParams.get('redirect');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,8 +22,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      router.push('/');
+      const loggedInUser = await login(email, password);
+      // Redirigir a la ruta original si existe, o al admin si es administrador, o al home.
+      const destination = redirect || (loggedInUser?.role === 'ADMIN' ? '/admin' : '/');
+      router.push(destination);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error al iniciar sesión';
       setError(message);
@@ -102,5 +107,20 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-500 font-semibold">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

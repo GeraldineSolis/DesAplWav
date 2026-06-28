@@ -55,6 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         saveToken(response.data.token);
         setToken(response.data.token);
         setUser(response.data.user);
+        return response.data.user;
       } else {
         throw new Error(response.message);
       }
@@ -76,6 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         saveToken(response.data.token);
         setToken(response.data.token);
         setUser(response.data.user);
+        return response.data.user;
       } else {
         throw new Error(response.message);
       }

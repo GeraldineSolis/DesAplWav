@@ -32,9 +32,13 @@ export async function middleware(request: NextRequest) {
   const adminRoutes = ['/admin'];
   const protectedRoutes = ['/admin'];
 
-  // Obtener token del header
+  // Obtener token del header o de las cookies
   const authHeader = request.headers.get('authorization');
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  let token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+
+  if (!token) {
+    token = request.cookies.get('auth_token')?.value || null;
+  }
 
   // Verificar si la ruta es pública
   const isPublicRoute = publicRoutes.some(route => 
@@ -59,14 +63,18 @@ export async function middleware(request: NextRequest) {
 
   // Si no hay token y es ruta protegida, redirigir a login
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Verificar token
   const payload = await verifyToken(token);
   
   if (!payload) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Protección por rol
