@@ -20,6 +20,15 @@ async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
+const getCategoryBadgeStyles = (name: string) => {
+  const normalized = name.toLowerCase();
+  if (normalized.includes('computadoras')) return 'bg-indigo-50 text-indigo-700 border border-indigo-100/60';
+  if (normalized.includes('periféricos')) return 'bg-emerald-50 text-emerald-700 border border-emerald-100/60';
+  if (normalized.includes('monitores')) return 'bg-amber-50 text-amber-700 border border-amber-100/60';
+  if (normalized.includes('audio')) return 'bg-rose-50 text-rose-700 border border-rose-100/60';
+  return 'bg-slate-100 text-slate-700 border border-slate-200/60';
+};
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -33,58 +42,70 @@ export default async function ProductDetailPage({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Link
         href="/"
-        className="inline-block mb-6 text-gray-600 hover:text-gray-900 transition-colors"
+        className="inline-flex items-center gap-2 mb-8 text-sm font-bold text-slate-500 hover:text-indigo-600 transition-all duration-200 hover:-translate-x-1"
       >
-        ← Volver a productos
+        <span>←</span> Volver a productos
       </Link>
 
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        {product.imageUrl && (
-          <div className="w-full h-96 bg-gray-200 overflow-hidden">
-            <img
-              src={product.imageUrl}
-              alt={product.nombre}
-              className="w-full h-full object-cover"
-            />
+      <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-xs p-6 md:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
+          
+          <div className="w-full">
+            {product.imageUrl ? (
+              <div className="w-full aspect-square bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+                <img
+                  src={product.imageUrl}
+                  alt={product.nombre}
+                  className="w-full h-full object-cover hover:scale-102 transition-transform duration-500"
+                />
+              </div>
+            ) : (
+              <div className="w-full aspect-square bg-slate-50 rounded-2xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-300">
+                <span className="text-4xl">📷</span>
+                <span className="text-xs mt-2 font-bold uppercase tracking-wider">Sin imagen</span>
+              </div>
+            )}
           </div>
-        )}
 
-        <div className="p-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {product.nombre}
-          </h1>
+          <div className="flex flex-col h-full pt-2">
+            {product.category && (
+              <div className="mb-4">
+                <span className={`inline-block px-3 py-1 text-xs font-black uppercase tracking-wider rounded-md border ${
+                  getCategoryBadgeStyles(product.category.nombre)
+                }`}>
+                  {product.category.nombre}
+                </span>
+              </div>
+            )}
 
-          {product.category && (
-            <div className="mb-4">
-              <p className="text-sm text-gray-600">Categoría:</p>
-              <p className="text-lg font-semibold text-gray-900">
-                {product.category.nombre}
-              </p>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+              {product.nombre}
+            </h1>
+
+            <div className="flex items-baseline py-4 border-y border-slate-100 mb-6">
+              <span className="text-base font-extrabold text-slate-400 mr-1.5">S/</span>
+              <span className="text-4xl font-black text-indigo-600">{product.precio}</span>
             </div>
-          )}
 
-          <div className="text-3xl font-bold text-gray-900 mb-6">
-            S/ {product.precio}
-          </div>
+            {product.descripcion && (
+              <div className="mb-6">
+                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+                  Descripción del Producto
+                </h2>
+                <p className="text-slate-600 leading-relaxed text-sm font-medium">
+                  {product.descripcion}
+                </p>
+              </div>
+            )}
 
-          {product.descripcion && (
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                Descripción
-              </h2>
-
-              <p className="text-gray-600 leading-relaxed">
-                {product.descripcion}
-              </p>
+            <div className="mt-auto pt-6 border-t border-slate-100 text-xs font-bold text-slate-400">
+              ID del producto: {product.id}
             </div>
-          )}
-
-          <div className="pt-6 border-t border-gray-200 text-sm text-gray-500">
-            ID del producto: {product.id}
           </div>
+
         </div>
       </div>
     </div>

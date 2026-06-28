@@ -7,8 +7,12 @@ const authRouter = require("./routes/auth");
 const app = express();
 
 // Configurar CORS
+const corsOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',')
+    : '*';
+
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: corsOrigins,
     credentials: true
 };
 app.use(cors(corsOptions));

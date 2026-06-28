@@ -15,7 +15,7 @@ async function verifyToken(token: string): Promise<TokenPayload | null> {
   try {
     const secret = new TextEncoder().encode(JWT_SECRET);
     const verified = await jose.jwtVerify(token, secret);
-    return verified.payload as TokenPayload;
+    return verified.payload as unknown as TokenPayload;
   } catch (error) {
     console.error('Token verification failed:', error);
     return null;

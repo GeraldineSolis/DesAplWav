@@ -3,7 +3,15 @@ const Category = require('../models/Category');
 
 exports.getAllProducts = async (req, res) => {
   try {
+    const { categoryId } = req.query;
+    const where = {};
+    
+    if (categoryId) {
+      where.categoryId = categoryId;
+    }
+
     const products = await Product.findAll({
+      where,
       include: [{ model: Category, as: 'category', attributes: ['id', 'nombre'] }]
     });
 

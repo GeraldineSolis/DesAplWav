@@ -27,10 +27,20 @@ const initializeRoles = async () => {
 
 const initializeCategories = async () => {
   try {
-    await Category.findOrCreate({
-      where: { nombre: 'General' },
-      defaults: { nombre: 'General', descripcion: 'Categoría general' }
-    });
+    const categories = [
+      { nombre: 'General', descripcion: 'Categoría general' },
+      { nombre: 'Computadoras', descripcion: 'Laptops, computadoras de escritorio y servidores' },
+      { nombre: 'Periféricos', descripcion: 'Teclados, mouses y otros accesorios' },
+      { nombre: 'Monitores', descripcion: 'Pantallas y monitores para computadoras' },
+      { nombre: 'Audio', descripcion: 'Audífonos, altavoces y dispositivos de sonido' }
+    ];
+
+    for (const cat of categories) {
+      await Category.findOrCreate({
+        where: { nombre: cat.nombre },
+        defaults: cat
+      });
+    }
 
     console.log("Categorías inicializadas correctamente.");
   } catch (error) {
