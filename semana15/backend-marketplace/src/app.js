@@ -8,11 +8,29 @@ const app = express();
 
 // Configurar CORS
 const corsOrigins = process.env.CORS_ORIGIN
-    ? process.env.CORS_ORIGIN.split(',')
+    ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim().replace(/\/$/, ''))
     : '*';
 
 const corsOptions = {
-    origin: corsOrigins,
+    origin: function (origin, callback) {
+        // Permitir peticiones sin origen (como curl o apps móviles)
+        if (!origin) return callback(null, true);
+        
+        // Permitir si coincide con las configuradas o si es *
+        if (corsOrigins === '*' || corsOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        // Permitir dominios de vista previa de Vercel del proyecto
+        const isVercelPreview = origin.endsWith('.vercel.app') && 
+            (origin.includes('solisgeraldine') || origin.includes('frontend-marketplace'));
+            
+        if (isVercelPreview) {
+            return callback(null, true);
+        }
+        
+        callback(new Error('No permitido por la política CORS'));
+    },
     credentials: true
 };
 app.use(cors(corsOptions));
